@@ -1,4 +1,4 @@
-#Your parking gargage class should have the following methods:
+#Your parking garage class should have the following methods:
 
 #- takeTicket
 #- This should decrease the amount of tickets available by 1
@@ -27,70 +27,85 @@
 # Classes:
     # Parking Garage
     # UI
+class Parking_Garage():
 
-# Steps:
+    def __init__(self):
+        self.spaces = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
+        self.tickets = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
+        self.current_ticket = {}
+
     # User takes ticket and enters Garage
         # Decrease available tickets by 1
         # Decrease available spaces by 1
-    
-    # User Leaves
-        # Prompt for payment
-        # If payment == amount owed: print "Thank you! Have a nice day."
-            # Increase available tickets by 1
-            # Increase available spaces by 1
-        # If payment != amount owed: "Please pay XXX amount"
-            # XXX amount should be Amount Due - Amount paid
-
-
-
-
-
-
-
-
-
-
-
-class Parking_Garage():
-    SPACES = 10
-
-    def __init__(self, spaces, tickets):
-        self.spaces = Parking_Garage.SPACES
-        self.tickets = 0
-        self.currentticket = {}
-
-    def take_ticket():
-        if self.tickets == 10:
+    def take_ticket(self):
+        if not self.spaces:
             print("There are no spaces available in the garage.")
 
         else:
-            print(f"Your ticket number is {self.spaces}")
-            self.currentticket[self.spaces] = False
-            self.spaces.pop(0)
-            self.tickets += 1
-        pass
+            ticket = self.tickets.pop(0)
+            spaces = self.spaces.pop(0)
+            self.current_ticket[ticket]="unpaid"
+            print(f"Your ticket number is {self.current_ticket}")
+            print(f"Spaces left: {self.spaces}.")
+            
+            
+    # Prompt for payment
+        # If payment == amount owed: print "Thank you! Have a nice day."
+            # Increase available tickets by 1
+            # Increase available spaces by 1
+        # If payment != amount owed: "Please pay ... amount"
+            # ... amount should be Amount Due - Amount paid
+    def pay_for_parking(self):
+        ticket = int(input("Enter your ticket number: "))
+        if self.current_ticket[ticket] == 5:
+            print("Thank you for your payment. You have 15 minutes to leave the garage.")
+            
+        else:
+            print("Please pay the amount due: $5.")
+            pay = int(input("Enter the amount you would like to pay: "))
+            if pay == 5:
+                print("Thank you for your payment! You may now select to leave.")
+                self.current_ticket[ticket]="paid"
+            elif pay < 5:
+                print("Please pay the amount due: $5.")
 
-    def pay_for_parking():
-        pass
-
-    def leave_garage():
-        pass
+    # User Leaves
+        # Check if ticket is paid
+        # If so, allow to leave
+        # If not, prompt for payment
+    def leave_garage(self):
+        ticket = int(input("Enter your ticket number: "))
+        if self.current_ticket[ticket] == "paid":
+            print("Thank you for parking with us! Have a great day!")
+        else:
+            print("Please pay the amount due before leaving the garage.")
+            self.pay_for_parking()
 
 
 
 class UI():
+    def __init__(self, Parking_Garage):
+        self.Parking_Garage = Parking_Garage
+
     def run_garage(self):
         while True:
+            print("----- Welcome to the Parking Garage! -----")
             response = input("What would you like to do? Park, pay, or leave? ").lower()
-            if response == 'park':
+            
+            if response.lower() == 'park':
                 self.Parking_Garage.take_ticket()
+            
+            elif response.lower() == 'pay':
+                self.Parking_Garage.pay_for_parking()
+            
+            elif response.lower() == 'leave':
+                self.Parking_Garage.leave_garage()
+                print("Thank you for parking with us! Have a great day!")
 
-
-
-
-
-
+            else:
+                break
 
 
 # Driver Code
-run_garage()
+ui = UI(Parking_Garage())
+ui.run_garage()
